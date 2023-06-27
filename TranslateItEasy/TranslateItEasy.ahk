@@ -1,7 +1,7 @@
-﻿/* TranslateItEasy v1.1.2
+﻿/* TranslateItEasy v1.2
 
-Last modified: 2023.06.27 18:30 (UTC+3)
-Compatible with AHK: 1.1.36
+Last modified: 2023.06.27 23:00 (UTC+3)
+Compatible with AHK: 1.1.36.02
 
 Summary: script for translating English words into Russian from the working environment
 
@@ -14,12 +14,11 @@ GitHub: https://github.com/1mafe/AHK-Scripts/tree/main/TranslateItEasy/
 Thanks to: AHK Discord Community (https://discord.gg/autohotkey) and especially to Bkid and Oakenlix
 */
 
-#SingleInstance, Force	 ; Determines whether a script is allowed to run again when it is already running. Force means skips the dialog box and replaces the old instance automatically
+#SingleInstance, Force		; Determines whether a script is allowed to run again when it is already running. Force means skips the dialog box and replaces the old instance automatically
 #Include, %A_ScriptDir%\Lib\JSON.ahk	 ; JSON lib to parse
-#Include, %A_ScriptDir%\Lib\ToolTipSize.ahk		; ToolTipSize lib to change font and size
+#Include, %A_ScriptDir%\Lib\ToolTipG.ahk		; ToolTipG lib to change font and size (recently has been older version of this lib named ToolTipSize)
 
-Step := 0
-ToolTipFont("s20", "Arial Black")		; ToolTip Font and Size (with ToolTipSize lib)
+step := 0
 
 f1:: 	; F1 hotkey
 if (step == 0)		; To On/Off ToolTip
@@ -62,8 +61,7 @@ if (step == 0)		; To On/Off ToolTip
 	WebRequest.Send(Data)		; Sends an HTTP request to an HTTP server.
 
 	Response := JSON.Load(WebRequest.ResponseText) ; Again Bkid helped me. JSON.Load is loading json array into an object (Response)
-	ToolTip, % Response["translation"][1], 1920, 1027 	; And our output converting by ["translation"][1]
-
+	ToolTipG(Text:=Response["translation"][1], X:="", Y:="", WhichToolTip:=1, Font:="s15", BgColor:="ffffff", TxColor:="")
 	ClipSaved := ""		; Free the memory of the clipboard.
 	step := 1
 	return
@@ -71,7 +69,7 @@ if (step == 0)		; To On/Off ToolTip
 
 else
 {
-	ToolTip		; Off ToolTip
+	ToolTipG(Text:="")		; Off ToolTip
 	step := 0
 	ClipSaved := ""
 	return

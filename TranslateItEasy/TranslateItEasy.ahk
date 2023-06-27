@@ -1,6 +1,6 @@
-﻿/* TranslateItEasy v1.1
+﻿/* TranslateItEasy v1.1.2
 
-Last modified: 2023.06.16 02:00 (UTC+3)
+Last modified: 2023.06.27 18:30 (UTC+3)
 Compatible with AHK: 1.1.36
 
 Summary: script for translating English words into Russian from the working environment
@@ -20,17 +20,20 @@ Thanks to: AHK Discord Community (https://discord.gg/autohotkey) and especially 
 
 Step := 0
 ToolTipFont("s20", "Arial Black")		; ToolTip Font and Size (with ToolTipSize lib)
-ClipSaved := ClipboardAll   ; Saving data in clipboard
-Clipboard := ClipSaved
 
 f1:: 	; F1 hotkey
 if (step == 0)		; To On/Off ToolTip
 {
+	ClipSaved := ClipboardAll   ; Saving data in clipboard
+	Clipboard := ClipSaved
 	APIURL := "https://api.reverso.net/translate/v1/translation"	; Translator Website
 
 	langFrom := "eng"	; Chosen languages (should be gui for choosing)
 	langTo := "ru"
-	Data := "{format:'text',from:'" langfrom "' ,input:'" Clipboard "',options:{contextResults:true,languageDetection:true,origin:'reversomobile',sentenceSplitter:false,},to:'" langTo "'}"	; Bkid helped me with this variable, which send to website json request
+	Data :=
+	(
+	{format:"text",from:"%langfrom%",input:"%Clipboard%",options:{contextResults:true,languageDetection:true,origin:"reversomobile",sentenceSplitter:false,},to:"%langTo%"}
+	)	; Bkid helped me with this variable, which send to website json request. Upd1: fixed confusion with defiition of ' and " by using multiline.
 
 	/*
 	Valid Languages (could be others, unsure):
@@ -56,7 +59,7 @@ if (step == 0)		; To On/Off ToolTip
 	global WebRequest := ComObjCreate("WinHttp.WinHttpRequest.5.1") 	; WinHTTPRequest to interact with the site
 	WebRequest.Open("POST", APIURL)		; Opens an HTTP connection to an HTTP resource.
 	WebRequest.SetRequestHeader("Content-Type","application/json")		; Adds, changes, or deletes an HTTP request header.
-	WebRequest.Send(Data)		; Sends an HTTP request to an HTTP server.
+	WebRequest.Send(Data1)		; Sends an HTTP request to an HTTP server.
 
 	Response := JSON.Load(WebRequest.ResponseText) ; Again Bkid helped me. JSON.Load is loading json array into an object (Response)
 	ToolTip, % Response["translation"][1], 1920, 1027 	; And our output converting by ["translation"][1]

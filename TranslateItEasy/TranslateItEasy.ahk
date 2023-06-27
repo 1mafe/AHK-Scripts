@@ -30,7 +30,7 @@ if (step == 0)		; To On/Off ToolTip
 
 	langFrom := "eng"	; Chosen languages (should be gui for choosing)
 	langTo := "ru"
-	Data :=
+	Data =
 	(
 	{format:"text",from:"%langfrom%",input:"%Clipboard%",options:{contextResults:true,languageDetection:true,origin:"reversomobile",sentenceSplitter:false,},to:"%langTo%"}
 	)	; Bkid helped me with this variable, which send to website json request. Upd1: fixed confusion with defiition of ' and " by using multiline.
